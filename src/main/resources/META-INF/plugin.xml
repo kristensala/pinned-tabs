@@ -5,14 +5,17 @@
     <vendor>kristensala</vendor>
 
     <depends>com.intellij.modules.platform</depends>
-
     <resource-bundle>messages.MyBundle</resource-bundle>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.kristensala.pinnedtabs.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-    </extensions>
-
-    <applicationListeners>
-        <listener class="com.github.kristensala.pinnedtabs.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
-    </applicationListeners>
+    <actions>
+        <action id="com.github.kristensala.pinnedtabs.dialog.PinFileAction"
+                class="com.github.kristensala.pinnedtabs.dialog.PinFileAction" text="Pin current file"
+                description="saves file path to project local settings">
+            <add-to-group group-id="FileMenu" anchor="before" relative-to-action="Exit"/>
+        </action>
+        <action id="com.github.kristensala.pinnedtabs.dialog.ShowDialogSampleAction"
+                class="com.github.kristensala.pinnedtabs.dialog.ShowDialogSampleAction" text="Show pinned tabs dialog">
+            <add-to-group group-id="EditorActions" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>
