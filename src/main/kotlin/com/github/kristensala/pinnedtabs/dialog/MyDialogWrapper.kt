@@ -3,21 +3,28 @@ package com.github.kristensala.pinnedtabs.dialog
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.popup.JBPopup
 import com.intellij.openapi.ui.popup.PopupChooserBuilder
+import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.ui.components.JBList
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.KeyEventDispatcher
 import java.awt.event.KeyEvent
+import java.io.File
+import javax.swing.DefaultListModel
 import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
 
 class ShowDialogSampleAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
-        PinnedTabsPopupComponent().show();
+        if (e.project != null) {
+            val p = e.project!!
+            PinnedTabsPopupComponent(p).show();
+        }
         /*if (PinnedTabs().isShowing) {
             PinnedTabs().close(0)
             return
@@ -51,16 +58,19 @@ class PinFileAction : AnAction() {
     storages = @Storage("SdkSettingsPlugin.xml")
 )*/
 
-class PinnedTabsPopupComponent() : KeyEventDispatcher {
+class PinnedTabsPopupComponent(project: Project) : KeyEventDispatcher {
     private var popup: JBPopup? = null
     private var list = JBList<String>()
     private var builder: PopupChooserBuilder<String> = PopupChooserBuilder(this.list)
 
+    private var _project: Project = project;
+
     init {
         this.builder
-            .setTitle("pinned tabs")
+            .setTitle("Pinned Tabs")
             .setMovable(true)
             .setResizable(true)
+
     }
 
     fun show() {
@@ -68,9 +78,16 @@ class PinnedTabsPopupComponent() : KeyEventDispatcher {
             return
         }
 
+        val dataModel = DefaultListModel<String>()
+        dataModel.addElement("asdf")
+        dataModel.addElement("asdf")
+        dataModel.addElement("asdf")
+        this.list.model = dataModel
+
+        //val virtualFile = LocalFileSystem.getInstance().findFileByIoFile(File("path"))
+
         popup = builder.createPopup()
-        popup?.showInFocusCenter()
-        //popup.showCenteredInCurrentWindow()
+        popup?.showCenteredInCurrentWindow(_project)
     }
 
     fun close() {
@@ -79,6 +96,13 @@ class PinnedTabsPopupComponent() : KeyEventDispatcher {
             popup?.cancel()
             popup = null
         }
+    }
+
+    // ex (fileName.cs) path grayed out
+    // SubmitApplication.cs (src/test/asdf/asdf/submitApplication.cs)
+    // SubmitApplication.cs (src/test/asdf/asdf/submitApplication.cs)
+    private fun buildPinnedFileList(): String {
+        return ""
     }
 
     override fun dispatchKeyEvent(e: KeyEvent?): Boolean {
