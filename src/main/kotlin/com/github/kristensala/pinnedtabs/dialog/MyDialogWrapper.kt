@@ -1,23 +1,22 @@
 package com.github.kristensala.pinnedtabs.dialog
 
+import com.github.kristensala.pinnedtabs.services.MyService
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.popup.JBPopup
 import com.intellij.openapi.ui.popup.PopupChooserBuilder
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.ui.components.JBList
-import java.awt.BorderLayout
-import java.awt.Dimension
 import java.awt.KeyEventDispatcher
+import java.awt.KeyboardFocusManager
+import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
+import java.awt.event.KeyListener
 import java.io.File
 import javax.swing.DefaultListModel
-import javax.swing.JComponent
-import javax.swing.JLabel
-import javax.swing.JPanel
+import javax.swing.KeyStroke
 
 class ShowDialogSampleAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
@@ -37,16 +36,12 @@ class PinFileAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val currentProject = e.project;
         if (currentProject != null) {
-            var path = currentProject.basePath;
             val fem = FileEditorManager.getInstance(currentProject);
-            // we want to save current file into some sort of
-            // a local project file under .idea/ folder
             val currentFile = fem.selectedFiles
             if (currentFile.isNotEmpty()) {
-                //File(currentProject.projectFile).writeText(currentFile[0].path)
+                MyService.getInstance(currentProject).list.add(currentFile[0].path)
             }
         }
-
     }
 
 }
@@ -58,7 +53,7 @@ class PinFileAction : AnAction() {
     storages = @Storage("SdkSettingsPlugin.xml")
 )*/
 
-class PinnedTabsPopupComponent(project: Project) : KeyEventDispatcher {
+class PinnedTabsPopupComponent(project: Project) {
     private var popup: JBPopup? = null
     private var list = JBList<String>()
     private var builder: PopupChooserBuilder<String> = PopupChooserBuilder(this.list)
@@ -70,7 +65,9 @@ class PinnedTabsPopupComponent(project: Project) : KeyEventDispatcher {
             .setTitle("Pinned Tabs")
             .setMovable(true)
             .setResizable(true)
-
+            .setItemChosenCallback(Runnable {
+                openSelectedFile(_project)
+            })
     }
 
     fun show() {
@@ -79,14 +76,13 @@ class PinnedTabsPopupComponent(project: Project) : KeyEventDispatcher {
         }
 
         val dataModel = DefaultListModel<String>()
-        dataModel.addElement("asdf")
-        dataModel.addElement("asdf")
-        dataModel.addElement("asdf")
+        MyService.getInstance(_project).list.forEach {
+            dataModel.addElement(it)
+        }
         this.list.model = dataModel
-
-        //val virtualFile = LocalFileSystem.getInstance().findFileByIoFile(File("path"))
-
+        this.list.addKeyListener(CustomKeyListener(_project, list))
         popup = builder.createPopup()
+
         popup?.showCenteredInCurrentWindow(_project)
     }
 
@@ -102,28 +98,68 @@ class PinnedTabsPopupComponent(project: Project) : KeyEventDispatcher {
     // SubmitApplication.cs (src/test/asdf/asdf/submitApplication.cs)
     // SubmitApplication.cs (src/test/asdf/asdf/submitApplication.cs)
     private fun buildPinnedFileList(): String {
+        //state.state.list
+        //state.list = JBList<String>();
         return ""
     }
 
-    override fun dispatchKeyEvent(e: KeyEvent?): Boolean {
-        TODO("Not yet implemented")
+    private fun openSelectedFile(project: Project){
+        var selectedFile = list.selectedValue
+        val virtualFile = LocalFileSystem.getInstance().findFileByIoFile(File(selectedFile))
+        if (virtualFile != null) {
+            FileEditorManager.getInstance(project).openFile(virtualFile)
+        }
     }
 }
 
-class PinnedTabs : DialogWrapper(true) {
-    init {
-        init()
-        title = "Pinned Tabs"
-        isModal = false
+class CustomKeyListener(
+    var project: Project,
+    var list: JBList<String>
+) : KeyListener {
+    override fun keyTyped(e: KeyEvent?) {
+        TODO("Not yet implemented")
     }
 
-    override fun createCenterPanel(): JComponent {
-        val panel = JPanel(BorderLayout())
-        val label = JLabel("Pinned tabs")
-        label.preferredSize = Dimension(500, 200)
-        panel.add(label, BorderLayout.CENTER)
+    override fun keyPressed(e: KeyEvent?) {
+        when (e?.keyCode) {
+            KeyEvent.VK_J -> moveDown()
+            KeyEvent.VK_K -> moveUp()
+            KeyEvent.VK_D -> onRemove()
+        }
 
-        return panel
+    }
+
+    override fun keyReleased(e: KeyEvent?) {
+        TODO("Not yet implemented")
+    }
+    private fun onRemove() {
+        val selectedIdx = list.selectedIndex
+        MyService.getInstance(project).list.removeAt(selectedIdx)
+    }
+
+    private fun moveDown() {
+        val listSize = list.itemsCount
+        val selectedIndex = list.selectedIndex
+        if (selectedIndex < listSize - 1) {
+            list.selectedIndex = selectedIndex + 1
+        }
+
+        if (selectedIndex == listSize - 1) {
+            list.selectedIndex = 0
+        }
+
+        list.ensureIndexIsVisible(list.selectedIndex)
+    }
+
+    private fun moveUp() {
+        val listSize = list.itemsCount
+        val selectedIndex = list.selectedIndex
+        if (selectedIndex == 0) {
+            list.selectedIndex = listSize - 1
+        } else {
+            list.selectedIndex = selectedIndex - 1
+        }
+        list.ensureIndexIsVisible(list.selectedIndex)
     }
 
 }
