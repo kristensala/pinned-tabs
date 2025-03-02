@@ -10,8 +10,18 @@ But it has a major flaw, files do not keep their order, which bothers me.
 <!-- Plugin description end -->
 
 ## Usage
+### Pinning a file
+
+### Removing a pin
+
+### Fixing possible errors
 
 
+## How it works
+
+Each project using any JetBrains IDE will generate a .idea/ directory.
+This plugin will create a `.pinned_tabs` file under said directory
+where each line is a path to a pinned file.
 ---
 Plugin based on the [IntelliJ Platform Plugin Template][template].
 
