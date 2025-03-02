@@ -8,14 +8,14 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <actions>
-        <action id="com.github.kristensala.pinnedtabs.dialog.PinFileAction"
-                class="com.github.kristensala.pinnedtabs.dialog.PinFileAction" text="Pin current file"
-                description="saves file path to project local settings">
-            <add-to-group group-id="FileMenu" anchor="before" relative-to-action="Exit"/>
+        <action id="com.github.kristensala.pinnedtabs.popup.TogglePopupAction"
+                class="com.github.kristensala.pinnedtabs.popup.TogglePopupAction" text="Toggle pinned files popup">
+            <add-to-group group-id="EditorTabPopupMenu" anchor="first"/>
         </action>
-        <action id="com.github.kristensala.pinnedtabs.dialog.ShowDialogSampleAction"
-                class="com.github.kristensala.pinnedtabs.dialog.ShowDialogSampleAction" text="Show pinned tabs dialog">
-            <add-to-group group-id="EditorActions" anchor="last"/>
+        <action id="com.github.kristensala.pinnedtabs.popup.PinFileAction"
+                class="com.github.kristensala.pinnedtabs.popup.PinFileAction" text="Pin Current Tab">
+            <add-to-group group-id="EditorTabsGroup" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="TAB"/>
         </action>
     </actions>
 
