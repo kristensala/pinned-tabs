@@ -16,6 +16,7 @@ But it has a major flaw, files do not keep their order, which bothers me.
 
 ### Fixing possible errors
 
+### Shortcuts when using ideaVim
 
 ## How it works
 
