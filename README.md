@@ -5,7 +5,8 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/MARKETPLACE_ID.svg)](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID)
 
 <!-- Plugin description -->
-here is desc
+This plugin is inspired by ![Harpoon](https://github.com/ThePrimeagen/harpoon). Intellij does provide something similar out of the box called Switcher.
+But it has a major flaw, files do not keep their order, which bothers me.
 <!-- Plugin description end -->
 
 ## Installation
