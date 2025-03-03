@@ -18,6 +18,11 @@ But it has a major flaw, files do not keep their order, which bothers me.
 
 ### Shortcuts when using ideaVim
 
+```
+nmap <C-e> <Action>(com.github.kristensala.pinnedtabs.popup.TogglePopupAction)
+nmap <leader>m <Action>(com.github.kristensala.pinnedtabs.popup.PinFileAction)
+```
+
 ## How it works
 
 Each project using any JetBrains IDE will generate a .idea/ directory.
