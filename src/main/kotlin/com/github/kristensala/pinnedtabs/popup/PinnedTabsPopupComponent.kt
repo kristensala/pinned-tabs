@@ -64,7 +64,7 @@ class PinnedTabsPopupComponent(project: Project) {
     private fun openSelectedFile(project: Project){
         var selectedFile = list.selectedValue
         if (selectedFile != null) {
-            FileEditorManager.getInstance(project).openFile(selectedFile)
+            FileEditorManager.getInstance(project).openFile(selectedFile, true)
         }
     }
 }
