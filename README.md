@@ -9,6 +9,10 @@ This plugin is inspired by [Harpoon](https://github.com/ThePrimeagen/harpoon). I
 But it has a major flaw, files do not keep their order, which bothers me.
 <!-- Plugin description end -->
 
+# Known bugs
+- [ ] On file open it does not give focus when using IdeaVim
+- [ ] If you have previously mapped J or K then this plugin will not override those mappings
+
 ## Usage
 ### Pinning a file
 
