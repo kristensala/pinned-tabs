@@ -14,6 +14,7 @@ But it has a major flaw, files do not keep their order, which bothers me.
 - [ ] If you have previously mapped J or K then this plugin will not override those mappings
 - [ ] Getting java.lang.IndexOutOfBoundsException: bitIndex < 0: -2 error sometimes when setting JList selectedIndex
 - [ ] In `.pinned_tabs` file paths are sometimes added on top of eachother, rather than on each line separately
+- [ ] Does not create a `.pinned_file` under `./idea` folder
 
 ## Usage
 ### Pinning a file
