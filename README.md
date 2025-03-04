@@ -10,7 +10,7 @@ But it has a major flaw, files do not keep their order, which bothers me.
 <!-- Plugin description end -->
 
 # Known bugs
-- [ ] On file open it does not give focus when using IdeaVim
+- [x] On file open it does not give focus when using IdeaVim
 - [ ] If you have previously mapped J or K then this plugin will not override those mappings
 - [ ] Getting java.lang.IndexOutOfBoundsException: bitIndex < 0: -2 error sometimes when setting JList selectedIndex
 - [ ] In `.pinned_tabs` file paths are sometimes added on top of eachother, rather than on each line separately
