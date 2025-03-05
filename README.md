@@ -16,6 +16,10 @@ But it has a major flaw, files do not keep their order, which bothers me.
 - [ ] In `.pinned_tabs` file paths are sometimes added on top of eachother, rather than on each line separately
 - [ ] Does not create a `.pinned_file` under `./idea` folder
 
+# QOL updates
+- [ ] When opening the popup, highlight currently open file, not the first one. Currently selected index is always by default 0
+
+
 ## Usage
 ### Pinning a file
 
