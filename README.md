@@ -1,8 +1,8 @@
 # PinnedTabs
 
 ![Build](https://github.com/kristensala/pinned-tabs/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/MARKETPLACE_ID.svg)](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/MARKETPLACE_ID.svg)](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID)
+[![Version](https://img.shields.io/jetbrains/plugin/v/MARKETPLACE_ID.svg)](https://plugins.jetbrains.com/plugin/26713-pinnedtabs)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/MARKETPLACE_ID.svg)](https://plugins.jetbrains.com/plugin/26713-pinnedtabs)
 
 <!-- Plugin description -->
 This plugin is inspired by [Harpoon](https://github.com/ThePrimeagen/harpoon). Intellij does provide something similar out of the box called Switcher.
