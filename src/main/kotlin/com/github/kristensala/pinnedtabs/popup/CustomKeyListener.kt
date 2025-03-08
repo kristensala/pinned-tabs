@@ -1,5 +1,6 @@
 package com.github.kristensala.pinnedtabs.popup
 
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
@@ -25,28 +26,32 @@ class CustomKeyListener(
             KeyEvent.VK_D -> onRemove()
             KeyEvent.VK_S -> onSettingsPress()
         }
-
     }
 
     override fun keyReleased(e: KeyEvent?) {
     }
 
     private fun onSettingsPress(){
-        val pluginFilePath = Path(project.basePath.toString(), ".idea/.pinned_tabs").toFile()
-        val virtualFile = LocalFileSystem.getInstance().findFileByIoFile(pluginFilePath)
-        if (virtualFile != null) {
-            FileEditorManager.getInstance(project).openFile(virtualFile)
-            // todo: close the popup
+        try {
+            val pluginFilePath = Path(project.basePath.toString(), ".idea/.pinned_tabs").toFile()
+            val virtualFile = LocalFileSystem.getInstance().findFileByIoFile(pluginFilePath)
+            if (virtualFile != null) {
+                PinnedTabsPopupComponent(project).close();
+                FileEditorManager.getInstance(project).openFile(virtualFile)
+            }
+        } catch (e: Exception) {
+            Logger.getInstance("PinnedTabs").error("Could not open .pinned_tabs file", e)
         }
     }
 
     private fun onRemove() {
         val pluginFilePath = Path(project.basePath.toString(), ".idea/.pinned_tabs")
-        var lines = File(pluginFilePath.toString()).readLines()
-        var linesFinal = lines.filter {
-                line -> line != list.selectedValue.path && line.isNotEmpty()}
+        val lines = File(pluginFilePath.toString()).readLines()
+        val linesFinal = lines.filter {
+                line -> line != list.selectedValue?.path && line.isNotEmpty()
+        }
 
-        File(pluginFilePath.toString()).writeText(linesFinal.joinToString("\n"))
+        File(pluginFilePath.toString()).writeText(linesFinal.joinToString(System.lineSeparator()))
         val dataModel = DefaultListModel<VirtualFile>()
 
         File(pluginFilePath.toString()).readLines().forEach {
@@ -58,10 +63,15 @@ class CustomKeyListener(
             }
         }
         this.list.model = dataModel
+        if (dataModel.size > 0) {
+            this.list.selectedIndex = 0
+        }
     }
 
     private fun moveDown() {
         val listSize = list.itemsCount
+        if (listSize == 0) return
+
         val selectedIndex = list.selectedIndex
         if (selectedIndex < listSize - 1) {
             list.selectedIndex = selectedIndex + 1
@@ -76,6 +86,8 @@ class CustomKeyListener(
 
     private fun moveUp() {
         val listSize = list.itemsCount
+        if (listSize == 0) return
+
         val selectedIndex = list.selectedIndex
         if (selectedIndex == 0) {
             list.selectedIndex = listSize - 1

@@ -1,7 +1,7 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.kristensala.pinnedtabs</id>
-    <name>pinned-tabs</name>
+    <name>PinnedTabs</name>
     <vendor>kristensala</vendor>
 
     <depends>com.intellij.modules.platform</depends>
@@ -20,5 +20,14 @@
     </actions>
 
     <!-- the persistent state service-->
-    <extensions defaultExtensionNs="com.intellij"/>
+    <extensions defaultExtensionNs="com.intellij">
+    </extensions>
+
+    <description>
+        This plugin is inspired by Harpoon.
+
+        Are you tired of tabs and the frustrations of navigating in you IDE. This plugin tries to solve the problem.
+        Pin however many files you are working with currently and think no more. Everything is exactly
+        where they need to be.
+    </description>
 </idea-plugin>

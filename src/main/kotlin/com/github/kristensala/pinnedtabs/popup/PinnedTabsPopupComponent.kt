@@ -10,6 +10,7 @@ import com.intellij.ui.components.JBList
 import java.io.File
 import javax.swing.DefaultListModel
 import kotlin.io.path.Path
+import kotlin.io.path.exists
 
 class PinnedTabsPopupComponent(project: Project) {
     private var popup: JBPopup? = null
@@ -36,16 +37,19 @@ class PinnedTabsPopupComponent(project: Project) {
         }
 
         val dataModel = DefaultListModel<VirtualFile>()
-        val pluginFilePath = Path(_project.basePath.toString(), ".idea/.pinned_tabs")
+        val pinnedTabsFile = Path(_project.basePath.toString(), ".idea/.pinned_tabs")
 
-        File(pluginFilePath.toString()).readLines().forEach {
-            if (it.isNotEmpty()) {
-                val virtualFile = LocalFileSystem.getInstance().findFileByIoFile(File(it))
-                if (virtualFile != null) {
-                    dataModel.addElement(virtualFile)
+        if (pinnedTabsFile.exists()) {
+            File(pinnedTabsFile.toString()).readLines().forEach {
+                if (it.isNotEmpty()) {
+                    val virtualFile = LocalFileSystem.getInstance().findFileByIoFile(File(it))
+                    if (virtualFile != null) {
+                        dataModel.addElement(virtualFile)
+                    }
                 }
             }
         }
+
         this.list.model = dataModel
         this.list.addKeyListener(CustomKeyListener(_project, list))
         popup = builder.createPopup()
